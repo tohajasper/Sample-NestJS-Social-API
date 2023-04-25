@@ -18,7 +18,7 @@ export class UsersRepository {
     }
   }
 
-  async findUser(usernameOrEmail: string): Promise<User | null> {
+  async findUser(usernameOrEmail: string): Promise<UserDocument| null> {
     try {
       return this.userModel.findOne({ $or: ([{ email: usernameOrEmail }, { username: usernameOrEmail }]) })
     } catch (error) {

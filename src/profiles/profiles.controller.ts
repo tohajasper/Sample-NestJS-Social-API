@@ -7,7 +7,8 @@ export class ProfilesController {
   @Post('createProfile')
   createProfile(@Body() payload: any): string {
     // middleware get user from token
-    return this.profileService.createProfile(payload);
+    // return this.profileService.createProfile(payload);
+    return 'hello world'
   }
 
   @Get('getProfile')
