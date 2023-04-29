@@ -1,7 +1,9 @@
-import { Body, Controller, Get, Post, Put } from '@nestjs/common';
+import { Body, Controller, Get, Post, Put, UseGuards } from '@nestjs/common';
 import { ProfilesService } from './profiles.service';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('api')
+@UseGuards(AuthGuard('jwt'))
 export class ProfilesController {
   constructor(private readonly profileService: ProfilesService){}
   @Post('createProfile')

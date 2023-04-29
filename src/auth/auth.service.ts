@@ -21,7 +21,7 @@ export class AuthService {
     throw new UnauthorizedException("Username/Email or Password is wrong")
   }
 
-  async createAccessToken(user: UserDocument): Promise<any> {
+  async createAccessToken(user: UserDocument): Promise<string> {
     const payload = {
       sub: user._id,
       username: user.username,
