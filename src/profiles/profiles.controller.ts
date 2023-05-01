@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Put, UseGuards, Request } from '@nestjs/common';
+import { Body, Controller, Get, Post, Put, UseGuards, Request, UsePipes, ValidationPipe } from '@nestjs/common';
 import { ProfilesService } from './profiles.service';
 import { AuthGuard } from '@nestjs/passport';
 import { UserDocument } from 'src/users/schema/user.schema';
@@ -9,7 +9,9 @@ import { ProfileDto } from './dto/profile.dto';
 @UseGuards(AuthGuard('jwt'))
 export class ProfilesController {
   constructor(private readonly profileService: ProfilesService){}
+
   @Post('createProfile')
+  @UsePipes(ValidationPipe)
   createProfile(@GetUser() user: UserDocument, @Body() payload: ProfileDto): Promise<void> {
     return this.profileService.createProfile(payload, user)
   }
@@ -20,6 +22,7 @@ export class ProfilesController {
   }
 
   @Put('updateProfile')
+  @UsePipes(ValidationPipe)
   updateProfile(@GetUser() user: UserDocument, @Body() payload: ProfileDto): Promise<ProfileDto> {
     return this.profileService.updateProfile(payload, user);
   }
