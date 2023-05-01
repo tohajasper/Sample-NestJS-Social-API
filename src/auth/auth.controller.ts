@@ -7,6 +7,6 @@ export class AuthController {
   constructor(private authService: AuthService) {}
   @Post('login')
   async login(@Body() payload: LoginUserDto): Promise<string> {
-    return  this.authService.validateUser(payload)
+    return this.authService.validateUser(payload)
   }
 }

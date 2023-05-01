@@ -13,7 +13,7 @@ export class AuthService {
   ) { }
 
   async validateUser(payload: LoginUserDto): Promise<string> {
-    const user = await this.usersService.findUser(payload);
+    const user = await this.usersService.findUser({ usernameOrEmail: payload.usernameOrEmail});
     if (user) {
       const valid = await bcrypt.compare(payload.password, user.password)
       if (valid) return this.createAccessToken(user);
