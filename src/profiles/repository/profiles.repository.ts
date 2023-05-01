@@ -1,31 +1,41 @@
 import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Profile, ProfileDocument } from '../schema/profile.schema';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { ProfileDto } from '../dto/profile.dto';
-import { User } from 'src/users/schema/user.schema';
+import { UserDocument } from 'src/users/schema/user.schema';
 
 @Injectable()
 export class ProfileRepository {
   constructor(@InjectModel(Profile.name) private profileModel: Model<ProfileDocument>) { }
 
-  async createProfile(profileData: ProfileDto, user: User): Promise<void> {
+  async createProfile(profileData: ProfileDto, user: UserDocument): Promise<void> {
     const createProfle = new this.profileModel(profileData);
     createProfle.user = user;
     try {
       await createProfle.save();
     } catch (error) {
-      // if(error.code === 11000) throw new BadRequestException(`${Object.keys(error.keyValue)} already exists`)
+      if(error.code === 11000) throw new BadRequestException(`This user already had a profile, use updateProfile endpoint!`)
+      // if(error.message.includes('validation failed')) throw new BadRequestException(error.message)
       throw new InternalServerErrorException()
     }
   }
 
-  async findUser(usernameOrEmail: string): Promise<Profile | null> {
+  async findProfileByUserId(userId: Types.ObjectId): Promise<Profile | null> {
     try {
-      return this.profileModel.findOne({ $or: ([{ email: usernameOrEmail }, { username: usernameOrEmail }]) })
+      return this.profileModel.findOne({ user : userId })
     } catch (error) {
       console.log(error)
       throw new InternalServerErrorException()
     }
   }
+
+  async updateProfile(profileData: ProfileDto, userId: Types.ObjectId): Promise<any> {
+    try {
+      return this.profileModel.updateOne({ user : userId }, {...profileData})
+    } catch (error) {
+      throw new InternalServerErrorException()
+    }
+  }
+
 }

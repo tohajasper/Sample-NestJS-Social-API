@@ -1,25 +1,29 @@
-import { Body, Controller, Get, Post, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Put, UseGuards, Request, UsePipes, ValidationPipe } from '@nestjs/common';
 import { ProfilesService } from './profiles.service';
 import { AuthGuard } from '@nestjs/passport';
+import { UserDocument } from 'src/users/schema/user.schema';
+import { GetUser } from 'src/users/user.decorator';
+import { ProfileDto } from './dto/profile.dto';
 
 @Controller('api')
 @UseGuards(AuthGuard('jwt'))
 export class ProfilesController {
   constructor(private readonly profileService: ProfilesService){}
+
   @Post('createProfile')
-  createProfile(@Body() payload: any): string {
-    // middleware get user from token
-    // return this.profileService.createProfile(payload);
-    return 'hello world'
+  @UsePipes(ValidationPipe)
+  createProfile(@GetUser() user: UserDocument, @Body() payload: ProfileDto): Promise<void> {
+    return this.profileService.createProfile(payload, user)
   }
 
   @Get('getProfile')
-  getProfile(): string {
-    return 'hello world';
+  getProfile(@GetUser() user: UserDocument): Promise<ProfileDto> {
+    return this.profileService.getProfile(user);
   }
 
   @Put('updateProfile')
-  updateProfile(): string {
-    return 'hello world';
+  @UsePipes(ValidationPipe)
+  updateProfile(@GetUser() user: UserDocument, @Body() payload: ProfileDto): Promise<ProfileDto> {
+    return this.profileService.updateProfile(payload, user);
   }
 }

@@ -9,7 +9,7 @@ export class Profile {
   @Prop()
   name?: string;
 
-  @Prop()
+  @Prop({ type: String, enum: ['Male' , 'Female' ]})
   gender?: 'Male' | 'Female';
 
   @Prop()
@@ -21,8 +21,8 @@ export class Profile {
   @Prop()
   weight?: number;
 
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
-  user: User;
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true, unique: true})
+  user!: User;
 }
 
 export const ProfileSchema = SchemaFactory.createForClass(Profile);
