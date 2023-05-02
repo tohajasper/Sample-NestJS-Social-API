@@ -1,0 +1,20 @@
+version: "3.9"
+services:
+  mongodb:
+      container_name: mongodb
+      image: mongo:latest
+      ports: 
+        - 27018:27017
+      volumes:
+        - mongodb_data:/data/db
+  api: 
+    container_name: api
+    image: challange-a/nestjs-api
+    env_file:
+      - .env
+    ports: 
+      - '8080:3000'
+    depends_on:
+      - mongodb
+volumes:
+  mongodb_data:

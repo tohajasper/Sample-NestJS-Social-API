@@ -11,7 +11,7 @@ import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb://localhost/challange-a'),
+    MongooseModule.forRoot(process.env.MONGODB_URI!),
     UsersModule,
     ProfilesModule,
     AuthModule,
