@@ -26,7 +26,7 @@ describe('UsersController', () => {
     expect(controller).toBeDefined();
   });
 
-  describe('/api/post register user', () => {
+  describe('POST /api/register register user', () => {
 
     const mockData = {
       username: 'john_doe',
