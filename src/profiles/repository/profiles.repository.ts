@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Profile, ProfileDocument } from '../schema/profile.schema';
-import { Model, Types } from 'mongoose';
+import { Model, Query, Types, UpdateWriteOpResult } from 'mongoose';
 import { ProfileDto } from '../dto/profile.dto';
 import { UserDocument } from 'src/users/schema/user.schema';
 
@@ -30,10 +30,12 @@ export class ProfileRepository {
     }
   }
 
-  async updateProfile(profileData: ProfileDto, userId: Types.ObjectId): Promise<any> {
+  async updateProfile(profileData: ProfileDto, userId: Types.ObjectId): Promise<Profile | null> {
     try {
-      return this.profileModel.updateOne({ user : userId }, {...profileData})
+      // mongoose didnt have the typings so we cast it
+      return this.profileModel.findOneAndUpdate({ user: userId }, { ...profileData }, { new: true }) as unknown as Profile | null
     } catch (error) {
+      console.log(error)
       throw new InternalServerErrorException()
     }
   }

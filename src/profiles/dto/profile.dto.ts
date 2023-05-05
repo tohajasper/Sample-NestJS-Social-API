@@ -10,7 +10,7 @@ export class ProfileDto {
 
   @IsDateString()
   @IsOptional()
-  birthday?: Date;
+  birthday?: string | Date;
 
   @IsNumber()
   @IsOptional()

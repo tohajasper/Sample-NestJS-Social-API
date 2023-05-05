@@ -12,8 +12,10 @@ export class RegisterUserDto {
   password: string;
 }
 
-export interface LoginUserDto {
+export class LoginUserDto {
   usernameOrEmail: string;
+
+  @MinLength(8)
   password: string;
 }
 

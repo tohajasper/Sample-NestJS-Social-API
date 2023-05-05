@@ -1,8 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { ProfileRepository } from './repository/profiles.repository';
 import { ProfileDto } from './dto/profile.dto';
-import { User, UserDocument } from 'src/users/schema/user.schema';
-
+import { UserDocument } from 'src/users/schema/user.schema';
 @Injectable()
 export class ProfilesService {
   constructor(private readonly profileRepository: ProfileRepository) {}
@@ -19,6 +18,9 @@ export class ProfilesService {
   }
 
   async updateProfile(payload: ProfileDto, user: UserDocument): Promise<ProfileDto> {
-    return this.profileRepository.updateProfile(payload, user._id);
+    const updated = await this.profileRepository.updateProfile(payload, user._id);
+    if (!updated) throw new NotFoundException('Profile Not Found')
+    const { name, gender, birthday, height, weight } = updated
+    return { name, gender, birthday, height, weight }
   }
 }
