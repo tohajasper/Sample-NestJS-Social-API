@@ -42,6 +42,7 @@ describe('AuthService', () => {
     jest.spyOn(bcrypt, 'compare')
       .mockImplementationOnce(() => true)
       .mockImplementationOnce(() => true)
+      .mockImplementationOnce(() => true)
       .mockImplementationOnce(() => false)
     
     beforeEach(async() => {
@@ -57,19 +58,26 @@ describe('AuthService', () => {
       expect(usersService.findUser).toHaveBeenCalledWith({ usernameOrEmail: mockData.usernameOrEmail});
     })
 
-    it('should check password and createAccessToken', async () => {
+    it('should check password', async () => {
 
       await authService.validateUser(mockData)
       expect(bcrypt.compare).toHaveBeenCalled();
       expect(bcrypt.compare).toHaveBeenCalledWith(mockData.password, mockUserData.password);
+    })
+
+    it('should return access token', async () => {
+
+      const access_token = await authService.validateUser(mockData)
       expect(authService.createAccessToken).toHaveBeenCalledTimes(1);
       expect(authService.createAccessToken).toHaveBeenCalledWith(mockUserData);
+      expect(access_token).toEqual('mock_access_token')
     })
 
     it('should not called createAccessToken if check password fails', async () => {
       
       try {
-        await authService.validateUser(mockData)
+        const jwt = await authService.validateUser(mockData)
+        expect(jwt).toThrow()
       } catch (error) {
         expect(authService.createAccessToken).not.toHaveBeenCalledTimes(1);
         expect(authService.createAccessToken).not.toHaveBeenCalledWith(mockData);

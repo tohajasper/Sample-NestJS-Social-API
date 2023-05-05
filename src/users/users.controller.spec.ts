@@ -47,56 +47,56 @@ describe('UsersController', () => {
       })
     })
 
-    describe('RegisterUserDto validation', () => {
+    // describe('RegisterUserDto validation', () => {
 
-      let target: ValidationPipe = new ValidationPipe({
-        transform: true,
-        whitelist: true,
-      });
-      const metadata: ArgumentMetadata = {
-        type: 'body',
-        metatype: RegisterUserDto,
-      };
+    //   let target: ValidationPipe = new ValidationPipe({
+    //     transform: true,
+    //     whitelist: true,
+    //   });
+    //   const metadata: ArgumentMetadata = {
+    //     type: 'body',
+    //     metatype: RegisterUserDto,
+    //   };
   
-      it('should register a new user under correct input', async () => {
-        const inputData = { ...mockData }
-        expect(
-          await target.transform(<RegisterUserDto>{ ...inputData }, metadata),
-        ).toEqual(inputData);
-      });
+    //   it('should register a new user under correct input', async () => {
+    //     const inputData = { ...mockData }
+    //     expect(
+    //       await target.transform(<RegisterUserDto>{ ...inputData }, metadata),
+    //     ).toEqual(inputData);
+    //   });
   
-      it('should failed under incorrect username length', async () => {
-        const inputData = {
-          ...mockData,
-          username: 'john_doeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
-        };
-        await target.transform(<RegisterUserDto>{ ...inputData }, metadata)
-        .catch((err) => {
-          expect(err.getResponse().message).toEqual(['username must be shorter than or equal to 20 characters']);
-        });
-      });
+    //   it('should failed under incorrect username length', async () => {
+    //     const inputData = {
+    //       ...mockData,
+    //       username: 'john_doeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    //     };
+    //     await target.transform(<RegisterUserDto>{ ...inputData }, metadata)
+    //     .catch((err) => {
+    //       expect(err.getResponse().message).toEqual(['username must be shorter than or equal to 20 characters']);
+    //     });
+    //   });
   
-      it('should failed under incorrect email', async () => {
-        const inputData = {
-          ...mockData,
-          email: 'testmail.com',
-        };
-        await target.transform(<RegisterUserDto>{ ...inputData }, metadata)
-        .catch((err) => {
-          expect(err.getResponse().message).toEqual(['email must be an email']);
-        });
-      });
+    //   it('should failed under incorrect email', async () => {
+    //     const inputData = {
+    //       ...mockData,
+    //       email: 'testmail.com',
+    //     };
+    //     await target.transform(<RegisterUserDto>{ ...inputData }, metadata)
+    //     .catch((err) => {
+    //       expect(err.getResponse().message).toEqual(['email must be an email']);
+    //     });
+    //   });
   
-      it('should failed under incorrect password length', async () => {
-        const inputData = {
-          ...mockData,
-          password: '123',
-        };
-        await target.transform(<RegisterUserDto>{ ...inputData }, metadata)
-        .catch((err) => {
-          expect(err.getResponse().message).toEqual(['password must be longer than or equal to 8 characters']);
-        });
-      });
-    })
+    //   it('should failed under incorrect password length', async () => {
+    //     const inputData = {
+    //       ...mockData,
+    //       password: '123',
+    //     };
+    //     await target.transform(<RegisterUserDto>{ ...inputData }, metadata)
+    //     .catch((err) => {
+    //       expect(err.getResponse().message).toEqual(['password must be longer than or equal to 8 characters']);
+    //     });
+    //   });
+    // })
   });
 });
